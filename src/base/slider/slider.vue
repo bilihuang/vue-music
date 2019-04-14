@@ -111,6 +111,10 @@ export default {
         this.slider.next()
       }, this.interval)
     }
+  },
+  destroyed() {
+    // 切换页面时destroyed清除定时器，释放内存
+    clearTimeout(this.timer)
   }
 }
 </script>

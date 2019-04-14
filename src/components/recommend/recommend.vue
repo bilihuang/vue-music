@@ -1,18 +1,30 @@
 <template>
   <div class="recommend">
     <div class="recommend-content">
-      <div v-if="recommends.length" class="slider-wrapper">
-        <slider>
-          <div v-for="item in recommends" :key="item.id">
-            <a :href="item.linkUrl">
-              <img :src="item.picUrl">
-            </a>
-          </div>
-        </slider>
-      </div>
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌单推荐</h1>
-        <ul></ul>
+      <div>
+        <div v-if="recommends.length" class="slider-wrapper">
+          <slider>
+            <div v-for="item in recommends" :key="item.id">
+              <a :href="item.linkUrl">
+                <img :src="item.picUrl">
+              </a>
+            </div>
+          </slider>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="item in discList" :key="item.id" class="item">
+              <div class="icon">
+                <img width="60" height="60" :src="item.picUrl">
+              </div>
+              <div class="text">
+                <h2 class="desc">{{item.songListDesc}}</h2>
+                <p class="author">{{item.songListAuthor}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -27,19 +39,21 @@ export default {
   components: {
     Slider
   },
-  data() {
+  data () {
     return {
-      recommends: []
+      recommends: [],
+      discList: []
     }
   },
-  created() {
+  created () {
     this._getRecommend()
   },
   methods: {
-    _getRecommend() {
+    _getRecommend () {
       getRecommend().then((res) => {
         if (res.code === ERR_OK) {
           this.recommends = res.data.slider
+          this.discList = res.data.songList
         }
       })
     }
@@ -85,10 +99,10 @@ export default {
           line-height: 20px
           overflow: hidden
           font-size: $font-size-medium
-          .name
+          .desc
             margin-bottom: 10px
             color: $color-text
-          .desc
+          .author
             color: $color-text-d
     .loading-container
       position: absolute

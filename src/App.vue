@@ -2,10 +2,12 @@
   <div id="app">
     <m-header></m-header>
     <tab></tab>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
-
+s
 <script type="text/ecmascript-6">
 import MHeader from 'components/m-header/m-header'
 import Tab from 'components/tab/tab'
