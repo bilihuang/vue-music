@@ -1,8 +1,8 @@
 <template>
   <div class="recommend">
-    <scroll class="recommend-content">
+    <scroll ref="scroll" class="recommend-content" :data="discList">
       <div>
-        <div v-if="recommends.length" class="slider-wrapper" :data="discList">
+        <div v-if="recommends.length" class="slider-wrapper">
           <slider>
             <div v-for="item in recommends" :key="item.id">
               <a :href="item.linkUrl">
@@ -16,7 +16,7 @@
           <ul>
             <li v-for="item in discList" :key="item.id" class="item">
               <div class="icon">
-                <img width="60" height="60" :src="item.picUrl">
+                <img width="60" height="60" v-lazy="item.picUrl">
               </div>
               <div class="text">
                 <h2 class="desc">{{item.songListDesc}}</h2>
@@ -62,9 +62,9 @@ export default {
     // 防止因为slider还未渲染导致refresh计算高度出错而滑不到底部
     loadImage () {
       // 只调一次，因为只需要一张图就可以撑开容器了
-      if(!this.checkLoaded){
+      if (!this.checkLoaded) {
         this.$refs.scroll.refresh()
-        this.checkLoaded = ture
+        this.checkLoaded = true
       }
     }
   }
