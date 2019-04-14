@@ -1,12 +1,12 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
+    <scroll class="recommend-content">
       <div>
-        <div v-if="recommends.length" class="slider-wrapper">
+        <div v-if="recommends.length" class="slider-wrapper" :data="discList">
           <slider>
             <div v-for="item in recommends" :key="item.id">
               <a :href="item.linkUrl">
-                <img :src="item.picUrl">
+                <img @load="loadImage" :src="item.picUrl">
               </a>
             </div>
           </slider>
@@ -26,18 +26,20 @@
           </ul>
         </div>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script>
 import Slider from 'base/slider/slider'
+import Scroll from 'base/scroll/scroll'
 import { getRecommend } from 'api/recommend'
 import { ERR_OK } from 'api/config'
 
 export default {
   components: {
-    Slider
+    Slider,
+    Scroll
   },
   data () {
     return {
@@ -56,6 +58,14 @@ export default {
           this.discList = res.data.songList
         }
       })
+    },
+    // 防止因为slider还未渲染导致refresh计算高度出错而滑不到底部
+    loadImage () {
+      // 只调一次，因为只需要一张图就可以撑开容器了
+      if(!this.checkLoaded){
+        this.$refs.scroll.refresh()
+        this.checkLoaded = ture
+      }
     }
   }
 }
